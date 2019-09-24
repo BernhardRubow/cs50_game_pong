@@ -34,6 +34,7 @@ Class = require 'class'
 -- our Paddle class, which stores position and dimensions for each Paddle
 -- and the logic for rendering them
 require 'Paddle'
+require 'PaddleAI'
 
 -- our Ball class, which isn't much different than a Paddle structure-wise
 -- but which will mechanically function very differently
@@ -91,7 +92,7 @@ function love.load()
     -- initialize our player paddles; make them global so that they can be
     -- detected by other functions and modules
     player1 = Paddle(10, 30, 5, 20)
-    player2 = Paddle(VIRTUAL_WIDTH - 10, VIRTUAL_HEIGHT - 30, 5, 20)
+    player2 = PaddleAI(VIRTUAL_WIDTH - 10, VIRTUAL_HEIGHT - 30, 5, 20)
 
     -- place a ball in the middle of the screen
     ball = Ball(VIRTUAL_WIDTH / 2 - 2, VIRTUAL_HEIGHT / 2 - 2, 4, 4)
@@ -141,6 +142,11 @@ function love.update(dt)
         ball.dy = math.random(-50, 50)
         if servingPlayer == 1 then
             ball.dx = math.random(140, 200)
+
+            -- +++ CUSTOMIZED +++
+            -- reset player id
+            player2.coolDown = 0
+            player2:enable()
         else
             ball.dx = -math.random(140, 200)
         end
@@ -158,7 +164,12 @@ function love.update(dt)
             else
                 ball.dy = math.random(10, 150)
             end
-
+            -- +++ CUSTOMIZED +++
+            --- enable player 2 Id
+            --- and set a coolDownTo to simulate the human reactiontime after the ball hit the
+            --- human player paddle
+            player2:enable()
+            player2.coolDown = 0.7
             sounds['paddle_hit']:play()
         end
         if ball:collides(player2) then
@@ -172,6 +183,9 @@ function love.update(dt)
                 ball.dy = math.random(10, 150)
             end
 
+            -- +++ CUSTOMIZED +++
+            --- disable playerAI until the ball hits the human player paddle
+            player2:disable()
             sounds['paddle_hit']:play()
         end
 
@@ -257,7 +271,7 @@ function love.update(dt)
     end
 
     player1:update(dt)
-    player2:update(dt)
+    player2:update(ball, dt)
 end
 
 --[[
