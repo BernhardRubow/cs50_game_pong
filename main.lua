@@ -34,6 +34,8 @@ Class = require 'class'
 -- our Paddle class, which stores position and dimensions for each Paddle
 -- and the logic for rendering them
 require 'Paddle'
+
+-- +++ CUSTOMIZED +++
 require 'PaddleAI'
 
 -- our Ball class, which isn't much different than a Paddle structure-wise
@@ -92,6 +94,8 @@ function love.load()
     -- initialize our player paddles; make them global so that they can be
     -- detected by other functions and modules
     player1 = Paddle(10, 30, 5, 20)
+
+    -- +++ CUSTOMIZED +++
     player2 = PaddleAI(VIRTUAL_WIDTH - 10, VIRTUAL_HEIGHT - 30, 5, 20)
 
     -- place a ball in the middle of the screen
@@ -271,6 +275,8 @@ function love.update(dt)
     end
 
     player1:update(dt)
+
+    -- +++ CUSTOMIZED +++
     player2:update(ball, dt)
 end
 
