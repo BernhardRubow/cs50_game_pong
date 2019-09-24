@@ -33,6 +33,7 @@ function PaddleAI:update(ball, dt)
         -- AI is enabled
 
         -- AI-Algorythem
+        ---------------------------------------
         --   if ball is above player move up
         --   if ball is lower player move down
         if ball.y <= self.y then 
